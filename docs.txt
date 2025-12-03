@@ -1,0 +1,20 @@
+login user :
+
+user 1
+email : test@test.com
+password : test1234567890
+
+user 2
+email : test2@test.com
+password : test123
+
+login admin :
+username : admin
+email : admin123@gmail.com
+password : admin123
+
+
+
+
+*bisa login pakai usename atau email . pilih salah satu aja
+
