@@ -6,13 +6,12 @@ if (isset($_POST['register'])) {
     $email = mysqli_real_escape_string($conn, $_POST['email']);
     $pass = password_hash($_POST['password'], PASSWORD_DEFAULT);
     
-    // Default Role adalah 'user'
     $query = "INSERT INTO users (nama_lengkap, email, password, role) VALUES ('$nama', '$email', '$pass', 'user')";
     
     if (mysqli_query($conn, $query)) {
         header("Location: login.php?status=success");
     } else {
-        $error = "Pendaftaran gagal!";
+        $error = "Gagal mendaftar. Email mungkin sudah digunakan.";
     }
 }
 ?>
@@ -25,53 +24,70 @@ if (isset($_POST['register'])) {
     <title>Daftar — E-Posyandu</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
-    <style>body{font-family:'Poppins','Helvetica Neue',Arial,sans-serif}</style>
+    <style>body{font-family:'Poppins',sans-serif}</style>
 </head>
-<body class="min-h-screen bg-gradient-to-br from-rose-50 via-white to-orange-50 flex items-center justify-center py-8">
+<body class="min-h-screen bg-gradient-to-br from-[#1D3428] via-[#2d4a38] to-[#0f1f18] flex items-center justify-center p-4">
 
-    <div class="max-w-5xl w-full grid grid-cols-1 md:grid-cols-2 gap-8 items-center px-4">
-        <div class="hidden md:flex flex-col items-start justify-center gap-6 pl-12">
-            <div class="w-20 h-20 rounded-xl bg-gradient-to-br from-rose-500 to-orange-400 flex items-center justify-center text-white text-2xl font-extrabold">EP</div>
-            <h2 class="text-3xl font-extrabold text-slate-900">Bergabung dengan E-Posyandu</h2>
-            <p class="text-slate-600 max-w-md">Buat akun untuk mulai mengelola janji imunisasi dan catat riwayat imunisasi anak Anda dengan mudah.</p>
+    <div class="w-full max-w-5xl bg-[#1D3428] rounded-[20px] shadow-2xl border-2 border-[#D0F246] overflow-hidden flex flex-col md:flex-row h-full md:min-h-[650px]">
+        
+        <div class="w-full md:w-1/2 p-10 flex flex-col justify-center items-center text-center bg-[#152920] relative">
+            <div class="absolute inset-0 opacity-10 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')]"></div>
+            
+            <div class="relative z-10">
+                <img src="../assets/images/logo_eposyadu.png" alt="E-Posyandu" class="w-24 h-24 object-contain mx-auto mb-6 drop-shadow-lg">
+                <h1 class="text-3xl font-black text-[#D0F246] leading-tight mb-4">Gabung Sekarang</h1>
+                <p class="text-gray-300 text-sm leading-relaxed mb-6 max-w-xs mx-auto">
+                    Buat akun untuk mulai memantau tumbuh kembang anak dan dapatkan akses ke fitur eksklusif.
+                </p>
+                <div class="bg-[#1D3428]/80 p-4 rounded-xl border border-[#D0F246]/20 text-left space-y-2">
+                    <div class="flex items-center gap-2 text-xs text-gray-300">
+                        <svg class="w-4 h-4 text-[#D0F246]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                        Gratis selamanya
+                    </div>
+                    <div class="flex items-center gap-2 text-xs text-gray-300">
+                        <svg class="w-4 h-4 text-[#D0F246]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                        Data aman & terenkripsi
+                    </div>
+                </div>
+            </div>
         </div>
 
-        <div class="mx-auto w-full max-w-md bg-white rounded-2xl shadow-lg p-8">
-            <div class="text-center mb-4">
-                <h3 class="text-2xl font-bold text-slate-900">Daftar Akun</h3>
-                <p class="text-sm text-slate-500 mt-1">Sudah punya akun? <a href="login.php" class="text-blue-600">Masuk</a></p>
-            </div>
+        <div class="w-full md:w-1/2 p-8 md:p-12 flex flex-col justify-center bg-gradient-to-b from-[#1D3428] to-[#0f1f18]">
+            <div class="max-w-md mx-auto w-full">
+                <h2 class="text-3xl font-bold text-[#D0F246] mb-2">Buat Akun</h2>
+                <p class="text-gray-400 text-sm mb-8">Lengkapi data diri Anda di bawah ini.</p>
 
-            <?php if (isset($error)): ?>
-                <div class="rounded-md bg-red-50 p-3 text-red-700 text-sm"><?= htmlspecialchars($error); ?></div>
-            <?php endif; ?>
+                <?php if (isset($error)): ?>
+                    <div class="rounded-[10px] bg-red-900/30 p-4 text-red-300 text-xs border border-red-700/50 mb-6">
+                        <?= htmlspecialchars($error); ?>
+                    </div>
+                <?php endif; ?>
 
-            <form method="POST" class="space-y-4 mt-4">
-                <div>
-                    <label class="block text-sm font-medium text-slate-700">Nama Lengkap</label>
-                    <input type="text" name="nama" required class="mt-2 block w-full px-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-rose-200">
-                </div>
-                <div>
-                    <label class="block text-sm font-medium text-slate-700">Email</label>
-                    <input type="email" name="email" required class="mt-2 block w-full px-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-rose-200">
-                </div>
-                <div>
-                    <label class="block text-sm font-medium text-slate-700">Password</label>
-                    <input type="password" name="password" required class="mt-2 block w-full px-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-rose-200">
-                </div>
+                <form action="" method="POST" class="space-y-4">
+                    <div>
+                        <label class="block text-xs font-semibold text-[#D0F246] mb-1.5 uppercase tracking-wide">Nama Lengkap</label>
+                        <input type="text" name="nama" required class="w-full px-4 py-3 border-2 border-[#D0F246]/30 bg-[#15261d] text-[#D0F246] rounded-[10px] placeholder-gray-600 focus:outline-none focus:ring-2 focus:ring-[#D0F246] focus:border-[#D0F246] transition" placeholder="Contoh: Siti Aminah">
+                    </div>
 
-                <button type="submit" name="register" class="w-full py-3 bg-gradient-to-r from-rose-500 to-orange-400 text-white rounded-lg font-semibold shadow hover:scale-[1.01] transition">Daftar Sekarang</button>
-            </form>
+                    <div>
+                        <label class="block text-xs font-semibold text-[#D0F246] mb-1.5 uppercase tracking-wide">Alamat Email</label>
+                        <input type="email" name="email" required class="w-full px-4 py-3 border-2 border-[#D0F246]/30 bg-[#15261d] text-[#D0F246] rounded-[10px] placeholder-gray-600 focus:outline-none focus:ring-2 focus:ring-[#D0F246] focus:border-[#D0F246] transition" placeholder="nama@email.com">
+                    </div>
 
-            <div class="mt-6">
-                <div class="relative">
-                    <div class="absolute inset-0 flex items-center"><div class="w-full border-t border-gray-200"></div></div>
-                    <div class="relative flex justify-center text-sm"><span class="px-2 bg-white text-slate-500">Atau daftar dengan</span></div>
-                </div>
-                <div class="mt-4">
-                    <button class="w-full flex justify-center items-center py-3 px-4 border border-gray-200 rounded-lg bg-white text-sm text-slate-700 hover:bg-gray-50">
-                        <img class="h-5 w-5 mr-2" src="https://www.svgrepo.com/show/475656/google-color.svg" alt=""> Daftar dengan Google
+                    <div>
+                        <label class="block text-xs font-semibold text-[#D0F246] mb-1.5 uppercase tracking-wide">Password</label>
+                        <input type="password" name="password" required class="w-full px-4 py-3 border-2 border-[#D0F246]/30 bg-[#15261d] text-[#D0F246] rounded-[10px] placeholder-gray-600 focus:outline-none focus:ring-2 focus:ring-[#D0F246] focus:border-[#D0F246] transition" placeholder="Minimal 6 karakter">
+                    </div>
+
+                    <button type="submit" name="register" class="w-full py-3.5 bg-gradient-to-r from-[#D0F246] to-[#bce038] text-[#1D3428] rounded-[10px] font-bold shadow-lg hover:shadow-[#D0F246]/20 hover:scale-[1.02] transition-all duration-300 mt-2">
+                        Daftar Akun
                     </button>
+                </form>
+
+                <div class="mt-8 text-center">
+                    <p class="text-gray-400 text-sm">
+                        Sudah punya akun? <a href="login.php" class="text-[#D0F246] font-bold hover:underline">Masuk disini</a>
+                    </p>
                 </div>
             </div>
         </div>

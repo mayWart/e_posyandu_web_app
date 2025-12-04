@@ -43,41 +43,41 @@ $history_query = mysqli_query($conn, "
 
 <div class="space-y-6 fade-up">
 
-    <div class="flex items-center gap-4 bg-white p-4 rounded-xl border border-gray-100 shadow-sm">
+    <div class="flex items-center gap-4 bg-gradient-to-br from-[#2d4a38] to-[#1D3428] p-6 rounded-[16px] border-2 border-[#D0F246] shadow-lg">
         <?php $initial = htmlspecialchars(strtoupper(substr(trim($balita['nama_balita']),0,1))); ?>
         <div class="h-16 w-16 rounded-full flex items-center justify-center text-xl font-semibold text-white <?= strtoupper(trim($balita['jenis_kelamin'])) === 'L' ? 'bg-blue-500' : 'bg-pink-500'; ?> transition-transform transform group-hover:scale-105">
             <?= $initial; ?>
         </div>
         <div>
-            <h3 class="text-xl font-bold text-gray-900"><?= htmlspecialchars($balita['nama_balita']); ?></h3>
-            <div class="text-sm text-gray-500 flex gap-3 mt-1 items-center">
-                <span class="bg-gray-50 px-2 py-0.5 rounded border border-gray-100">NIK: <?= htmlspecialchars($balita['nik']); ?></span>
-                <span class="bg-gray-50 px-2 py-0.5 rounded border border-gray-100">Lahir: <?= date('d/m/Y', strtotime($balita['tgl_lahir'])); ?></span>
-                <span class="bg-gray-50 px-2 py-0.5 rounded border border-gray-100 font-medium"><?= strtoupper(trim($balita['jenis_kelamin'])) === 'L' ? 'Laki-laki' : 'Perempuan'; ?></span>
+            <h3 class="text-xl font-bold text-[#D0F246]"><?= htmlspecialchars($balita['nama_balita']); ?></h3>
+            <div class="text-sm text-gray-300 flex gap-3 mt-1 items-center flex-wrap">
+                <span class="bg-[#154620] px-3 py-1 rounded-full border border-[#D0F246]/30 text-gray-300">NIK: <?= htmlspecialchars($balita['nik']); ?></span>
+                <span class="bg-[#154620] px-3 py-1 rounded-full border border-[#D0F246]/30 text-gray-300">Lahir: <?= date('d/m/Y', strtotime($balita['tgl_lahir'])); ?></span>
+                <span class="bg-[#154620] px-3 py-1 rounded-full border border-[#D0F246]/30 font-medium text-gray-300"><?= strtoupper(trim($balita['jenis_kelamin'])) === 'L' ? 'Laki-laki' : 'Perempuan'; ?></span>
             </div>
         </div>
     </div>
 
-    <div class="bg-white p-4 rounded-xl border border-gray-200 shadow-sm">
-        <h4 class="font-bold text-gray-700 mb-2 text-sm flex items-center gap-2">
-            <svg class="w-4 h-4 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 12l3-3 3 3 4-4M8 21l4-4 4 4M3 4h18M4 4h16v12a1 1 0 01-1 1H5a1 1 0 01-1-1V4z"/></svg>
+    <div class="bg-gradient-to-br from-[#2d4a38] to-[#1D3428] p-6 rounded-[16px] border-2 border-[#D0F246] shadow-lg">
+        <h4 class="font-bold text-[#D0F246] mb-4 text-sm flex items-center gap-2">
+            <svg class="w-4 h-4 text-[#D0F246]" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 12l3-3 3 3 4-4M8 21l4-4 4 4M3 4h18M4 4h16v12a1 1 0 01-1 1H5a1 1 0 01-1-1V4z"/></svg>
             Grafik Berat Badan
         </h4>
         <div class="relative h-48 w-full">
             <?php if(count($data_bb) > 0): ?>
                 <canvas id="chartModalCanvas"></canvas>
             <?php else: ?>
-                <div class="flex h-full items-center justify-center text-gray-400 text-sm italic bg-gray-50 rounded-lg">Belum ada data pengukuran.</div>
+                <div class="flex h-full items-center justify-center text-gray-400 text-sm italic bg-[#154620] rounded-lg">Belum ada data pengukuran.</div>
             <?php endif; ?>
         </div>
     </div>
 
     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
         
-        <div class="border rounded-xl overflow-hidden">
-            <div class="bg-gray-50 px-4 py-2 border-b text-xs font-bold text-gray-500 uppercase">Pengukuran Terakhir</div>
+        <div class="bg-gradient-to-br from-[#2d4a38] to-[#1D3428] border-2 border-[#D0F246] rounded-[16px] overflow-hidden shadow-lg">
+            <div class="bg-[#1D3428] px-6 py-3 border-b-2 border-[#D0F246] text-xs font-bold text-[#D0F246] uppercase tracking-wider">📏 Pengukuran Terakhir</div>
             <div class="overflow-y-auto max-h-40">
-                <table class="min-w-full text-sm divide-y divide-gray-100">
+                <table class="min-w-full text-sm divide-y divide-[#154620]">
                     <?php 
                     // Reset pointer query pengukuran
                     mysqli_data_seek($ukur_query, 0);
@@ -89,31 +89,31 @@ $history_query = mysqli_query($conn, "
                     if(count($data_ukur_array) > 0):
                         foreach($data_ukur_array as $u): 
                     ?>
-                        <tr>
-                            <td class="px-4 py-2 text-gray-900"><?= date('d/m/y', strtotime($u['tgl_ukur'])); ?></td>
-                            <td class="px-4 py-2 font-bold text-blue-600"><?= $u['berat_badan']; ?> Kg</td>
-                            <td class="px-4 py-2 text-gray-500"><?= $u['tinggi_badan']; ?> Cm</td>
+                        <tr class="hover:bg-[#154620] transition">
+                            <td class="px-6 py-3 text-gray-300 font-medium"><?= date('d/m/y', strtotime($u['tgl_ukur'])); ?></td>
+                            <td class="px-6 py-3 font-bold text-[#D0F246]"><?= $u['berat_badan']; ?> Kg</td>
+                            <td class="px-6 py-3 text-gray-400"><?= $u['tinggi_badan']; ?> Cm</td>
                         </tr>
                     <?php endforeach; else: ?>
-                        <tr><td colspan="3" class="px-4 py-4 text-center text-gray-400">Kosong</td></tr>
+                        <tr><td colspan="3" class="px-6 py-6 text-center text-gray-400">Kosong</td></tr>
                     <?php endif; ?>
                 </table>
             </div>
         </div>
 
-        <div class="border rounded-xl overflow-hidden">
-            <div class="bg-gray-50 px-4 py-2 border-b text-xs font-bold text-gray-500 uppercase">Riwayat Imunisasi</div>
+        <div class="bg-gradient-to-br from-[#2d4a38] to-[#1D3428] border-2 border-[#D0F246] rounded-[16px] overflow-hidden shadow-lg">
+            <div class="bg-[#1D3428] px-6 py-3 border-b-2 border-[#D0F246] text-xs font-bold text-[#D0F246] uppercase tracking-wider">💉 Riwayat Imunisasi</div>
             <div class="overflow-y-auto max-h-40">
-                <table class="min-w-full text-sm divide-y divide-gray-100">
+                <table class="min-w-full text-sm divide-y divide-[#154620]">
                     <?php if(mysqli_num_rows($history_query) > 0): while($h = mysqli_fetch_assoc($history_query)): ?>
-                        <tr>
-                            <td class="px-4 py-2 text-gray-900"><?= htmlspecialchars($h['nama_imunisasi']); ?></td>
-                            <td class="px-4 py-2 text-right">
-                                <span class="text-xs bg-green-100 text-green-700 px-2 py-0.5 rounded-full"><?= date('d M Y', strtotime($h['tgl_suntik'])); ?></span>
+                        <tr class="hover:bg-[#154620] transition">
+                            <td class="px-6 py-3 text-gray-300 font-medium"><?= htmlspecialchars($h['nama_imunisasi']); ?></td>
+                            <td class="px-6 py-3 text-right">
+                                <span class="text-xs bg-emerald-900/30 text-emerald-300 px-3 py-1 rounded-full border border-emerald-700"><?= date('d M Y', strtotime($h['tgl_suntik'])); ?></span>
                             </td>
                         </tr>
                     <?php endwhile; else: ?>
-                        <tr><td colspan="2" class="px-4 py-4 text-center text-gray-400">Belum ada imunisasi.</td></tr>
+                        <tr><td colspan="2" class="px-6 py-6 text-center text-gray-400">Belum ada imunisasi.</td></tr>
                     <?php endif; ?>
                 </table>
             </div>

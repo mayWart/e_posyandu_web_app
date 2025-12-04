@@ -1,43 +1,30 @@
 <?php
 require '../config.php';
 
-// Jika sudah login, lempar langsung ke dashboard
 if (isset($_SESSION['user_id'])) {
     header("Location: dashboard.php");
     exit;
 }
 
-// Logika Login
 if (isset($_POST['login'])) {
-    // Ubah variabel dari $email jadi $identity agar lebih umum
     $identity = mysqli_real_escape_string($conn, $_POST['identity']);
     $password = $_POST['password'];
 
-    // Cek user berdasarkan email ATAU nama_lengkap
-    // Menggunakan query "OR"
     $query = "SELECT * FROM users WHERE email = '$identity' OR nama_lengkap = '$identity'";
     $result = mysqli_query($conn, $query);
 
-    // Jika user ditemukan
     if (mysqli_num_rows($result) === 1) {
         $row = mysqli_fetch_assoc($result);
-        
-        // Verifikasi Password
         if (password_verify($password, $row['password'])) {
-            // Set Session
             $_SESSION['user_id'] = $row['id'];
             $_SESSION['nama'] = $row['nama_lengkap'];
             $_SESSION['role'] = $row['role']; 
-            
-            // Redirect ke Dashboard
             header("Location: dashboard.php");
             exit;
         }
     }
-    
     $error = "Akun tidak ditemukan atau Password salah!";
 }
-
 ?>
 
 <!doctype html>
@@ -48,74 +35,77 @@ if (isset($_POST['login'])) {
     <title>Masuk — E-Posyandu</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
-    <style>body{font-family:'Poppins','Helvetica Neue',Arial,sans-serif}</style>
+    <style>body{font-family:'Poppins',sans-serif}</style>
 </head>
-<body class="min-h-screen bg-gradient-to-br from-sky-50 via-white to-emerald-50 flex items-center justify-center py-8">
+<body class="min-h-screen bg-gradient-to-br from-[#1D3428] via-[#2d4a38] to-[#0f1f18] flex items-center justify-center p-4">
 
-    <div class="max-w-6xl w-full grid grid-cols-1 md:grid-cols-2 gap-8 items-center px-4">
-        <!-- Visual / Hero -->
-        <div class="hidden md:flex flex-col items-start justify-center gap-6 pl-12">
-            <div class="w-24 h-24 rounded-xl bg-gradient-to-br from-blue-600 to-teal-400 flex items-center justify-center text-white text-2xl font-extrabold">EP</div>
-            <h1 class="text-4xl font-extrabold text-slate-900">Selamat Datang di E-Posyandu</h1>
-            <p class="text-slate-600 max-w-md">Kelola janji imunisasi dan catat riwayat imunisasi anak Anda dengan mudah. Aman, cepat, dan terintegrasi.</p>
-            <ul class="mt-4 space-y-2 text-sm text-slate-600">
-                <li class="flex items-center gap-2"><span class="text-emerald-500">✔</span> Mudah diakses</li>
-                <li class="flex items-center gap-2"><span class="text-emerald-500">✔</span> Notifikasi jadwal</li>
-                <li class="flex items-center gap-2"><span class="text-emerald-500">✔</span> Riwayat digital</li>
-            </ul>
+    <div class="w-full max-w-5xl bg-[#1D3428] rounded-[20px] shadow-2xl border-2 border-[#D0F246] overflow-hidden flex flex-col md:flex-row h-full md:min-h-[600px]">
+        
+        <div class="w-full md:w-1/2 p-10 flex flex-col justify-center items-center text-center bg-[#152920] relative">
+            <div class="absolute inset-0 opacity-10 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')]"></div>
+            
+            <div class="relative z-10">
+                <img src="../assets/images/logo_eposyadu.png" alt="E-Posyandu" class="w-24 h-24 object-contain mx-auto mb-6 drop-shadow-lg">
+                
+                <h1 class="text-4xl font-black text-[#D0F246] leading-tight mb-4">E-Posyandu</h1>
+                <p class="text-gray-300 text-sm leading-relaxed mb-8 max-w-sm mx-auto">
+                    Kelola jadwal imunisasi dan catat riwayat kesehatan anak Anda dengan mudah, aman, dan terintegrasi.
+                </p>
+
+                <ul class="text-sm text-gray-400 space-y-2 text-left inline-block">
+                    <li class="flex items-center gap-3"><span class="w-2 h-2 rounded-full bg-[#D0F246]"></span> Akses Mudah 24/7</li>
+                    <li class="flex items-center gap-3"><span class="w-2 h-2 rounded-full bg-[#D0F246]"></span> Notifikasi Jadwal</li>
+                    <li class="flex items-center gap-3"><span class="w-2 h-2 rounded-full bg-[#D0F246]"></span> Grafik Pertumbuhan</li>
+                </ul>
+            </div>
         </div>
 
-        <!-- Form Card -->
-        <div class="mx-auto w-full max-w-md bg-white rounded-2xl shadow-lg p-8">
-            <div class="text-center">
-                <h2 class="text-2xl font-bold text-slate-900">Masuk ke E-Posyandu</h2>
-                <p class="mt-2 text-sm text-slate-500">Belum punya akun? <a href="register.php" class="text-blue-600 font-medium">Daftar sekarang</a></p>
-            </div>
+        <div class="w-full md:w-1/2 p-8 md:p-12 flex flex-col justify-center bg-gradient-to-b from-[#1D3428] to-[#0f1f18]">
+            <div class="max-w-md mx-auto w-full">
+                <h2 class="text-3xl font-bold text-[#D0F246] mb-2">Selamat Datang</h2>
+                <p class="text-gray-400 text-sm mb-8">Silakan masuk dengan akun Anda.</p>
 
-            <div class="mt-6">
-                <?php if (isset($_GET['status']) && $_GET['status'] == 'success'): ?>
-                    <div class="rounded-md bg-emerald-50 p-3 text-emerald-700 text-sm">Akun berhasil dibuat. Silakan login.</div>
-                <?php endif; ?>
                 <?php if (isset($error)): ?>
-                    <div class="rounded-md bg-red-50 p-3 text-red-700 text-sm"><?= htmlspecialchars($error); ?></div>
+                    <div class="rounded-[10px] bg-red-900/30 p-4 text-red-300 text-xs border border-red-700/50 mb-6 flex items-center gap-2">
+                        <svg class="w-4 h-4 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"/></svg>
+                        <?= htmlspecialchars($error); ?>
+                    </div>
                 <?php endif; ?>
 
-                <form action="" method="POST" class="mt-6 space-y-5">
+                <?php if (isset($_GET['status']) && $_GET['status'] == 'success'): ?>
+                    <div class="rounded-[10px] bg-emerald-900/30 p-4 text-emerald-300 text-xs border border-emerald-700/50 mb-6">
+                        Registrasi berhasil! Silakan login.
+                    </div>
+                <?php endif; ?>
+
+                <form action="" method="POST" class="space-y-5">
                     <div>
-                        <label class="block text-sm font-medium text-slate-700">Email atau Nama Lengkap</label>
-                        <input type="text" name="identity" required class="mt-2 block w-full px-4 py-3 border border-gray-200 rounded-lg placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-200" autocomplete="username">
+                        <label class="block text-xs font-semibold text-[#D0F246] mb-2 uppercase tracking-wide">Email / Username</label>
+                        <input type="text" name="identity" required class="w-full px-4 py-3 border-2 border-[#D0F246]/30 bg-[#15261d] text-[#D0F246] rounded-[10px] placeholder-gray-600 focus:outline-none focus:ring-2 focus:ring-[#D0F246] focus:border-[#D0F246] transition" placeholder="Masukkan email atau nama">
                     </div>
 
                     <div>
-                        <label class="block text-sm font-medium text-slate-700">Password</label>
-                        <div class="relative mt-2">
-                            <input id="password" name="password" type="password" required class="block w-full px-4 py-3 border border-gray-200 rounded-lg pr-12 focus:outline-none focus:ring-2 focus:ring-blue-200" autocomplete="current-password">
-                            <button type="button" onclick="togglePassword()" class="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400">
-                                <svg id="eye-on" xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+                        <div class="flex justify-between items-center mb-2">
+                            <label class="block text-xs font-semibold text-[#D0F246] uppercase tracking-wide">Password</label>
+                            <a href="#" class="text-xs text-[#D0F246] hover:text-[#bce038] transition">Lupa password?</a>
+                        </div>
+                        <div class="relative">
+                            <input id="password" name="password" type="password" required class="w-full px-4 py-3 border-2 border-[#D0F246]/30 bg-[#15261d] text-[#D0F246] rounded-[10px] pr-12 placeholder-gray-600 focus:outline-none focus:ring-2 focus:ring-[#D0F246] focus:border-[#D0F246] transition" placeholder="Masukkan password">
+                            <button type="button" onclick="togglePassword()" class="absolute inset-y-0 right-0 pr-4 flex items-center text-[#D0F246] hover:text-[#bce038] transition">
+                                <svg id="eye-icon" xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
                             </button>
                         </div>
                     </div>
 
-                    <div class="flex items-center justify-between text-sm">
-                        <label class="flex items-center gap-2 text-slate-700"><input type="checkbox" name="remember-me" class="h-4 w-4 text-blue-600"> Ingat saya</label>
-                        <a href="#" class="text-blue-600">Lupa password?</a>
-                    </div>
-
-                    <div>
-                        <button type="submit" name="login" class="w-full py-3 bg-gradient-to-r from-blue-600 to-teal-400 text-white rounded-lg font-semibold shadow hover:scale-[1.01] transition">Masuk</button>
-                    </div>
+                    <button type="submit" name="login" class="w-full py-3.5 bg-gradient-to-r from-[#D0F246] to-[#bce038] text-[#1D3428] rounded-[10px] font-bold shadow-lg hover:shadow-[#D0F246]/20 hover:scale-[1.02] transition-all duration-300">
+                        Masuk Sekarang
+                    </button>
                 </form>
 
-                <div class="mt-6">
-                    <div class="relative">
-                        <div class="absolute inset-0 flex items-center"><div class="w-full border-t border-gray-200"></div></div>
-                        <div class="relative flex justify-center text-sm"><span class="px-2 bg-white text-slate-500">atau masuk dengan</span></div>
-                    </div>
-                    <div class="mt-4">
-                        <a href="#" class="w-full inline-flex items-center justify-center gap-3 px-4 py-3 border border-gray-200 rounded-lg text-sm text-slate-700 hover:bg-gray-50">
-                            <img class="h-5 w-5" src="https://www.svgrepo.com/show/475656/google-color.svg" alt="Google">Masuk dengan Google
-                        </a>
-                    </div>
+                <div class="mt-8 text-center">
+                    <p class="text-gray-400 text-sm">
+                        Belum punya akun? <a href="register.php" class="text-[#D0F246] font-bold hover:underline">Daftar disini</a>
+                    </p>
                 </div>
             </div>
         </div>
@@ -124,7 +114,7 @@ if (isset($_POST['login'])) {
     <script>
         function togglePassword(){
             const p = document.getElementById('password');
-            if(p.type === 'password') p.type = 'text'; else p.type = 'password';
+            p.type = p.type === 'password' ? 'text' : 'password';
         }
     </script>
 </body>
