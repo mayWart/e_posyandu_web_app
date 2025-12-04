@@ -1,6 +1,6 @@
 <?php
 $host = 'localhost';
-$db   = 'db_e_posyandu';
+$db = 'db_e_posyandu';
 $user = 'root';
 $pass = '';
 

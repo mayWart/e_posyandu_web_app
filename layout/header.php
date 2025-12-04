@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="id">
+
 <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -50,24 +51,85 @@
                 });
             }
 
-            // Confirmation dialog, then navigate to href when confirmed
-            function confirmDelete(text, href) {
-                Swal.fire({
-                    title: text || 'Yakin?',
-                    icon: 'warning',
-                    showCancelButton: true,
-                    confirmButtonColor: '#ef4444',
-                    cancelButtonColor: '#6b7280',
-                    confirmButtonText: 'Ya, hapus',
-                    cancelButtonText: 'Batal'
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        window.location = href;
-                    }
-                });
+            50% {
+                transform: translateY(-6px);
             }
-        </script>
+
+            100% {
+                transform: translateY(0px);
+            }
+        
+
+        .float-up {
+            animation: float-up 4s ease-in-out infinite;
+        }
+
+        @keyframes fade-up {
+            from {
+                opacity: 0;
+                transform: translateY(8px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .fade-up {
+            animation: fade-up .6s ease forwards;
+        }
+    </style>
+    <script>
+        function toggleMobileMenu() {
+            const el = document.getElementById('mobileMenu');
+            el.classList.toggle('hidden');
+        }
+        function toggleProfileMenu() {
+            const el = document.getElementById('profileMenu');
+            el.classList.toggle('hidden');
+        }
+        // close dropdown when clicking outside
+        document.addEventListener('click', function (e) {
+            const pm = document.getElementById('profileMenu');
+            const btn = document.getElementById('profileBtn');
+            if (pm && btn && !btn.contains(e.target) && !pm.contains(e.target)) pm.classList.add('hidden');
+        });
+    </script>
+    <!-- SweetAlert2 -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        // Helper to show toast/modal and optional redirect
+        function showAlert(icon, title, text, redirect) {
+            Swal.fire({
+                icon: icon || 'info',
+                title: title || '',
+                text: text || '',
+                confirmButtonColor: '#10b981'
+            }).then(function () {
+                if (redirect) window.location = redirect;
+            });
+        }
+
+        // Confirmation dialog, then navigate to href when confirmed
+        function confirmDelete(text, href) {
+            Swal.fire({
+                title: text || 'Yakin?',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#ef4444',
+                cancelButtonColor: '#6b7280',
+                confirmButtonText: 'Ya, hapus',
+                cancelButtonText: 'Batal'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    window.location = href;
+                }
+            });
+        }
+    </script>
 </head>
+
 <body class="text-gray-800">
 
 <header class="sticky top-0 z-50 bg-[#1D3428] border-b border-[#154620]">
@@ -97,7 +159,7 @@
                     <?php if($badge > 0): ?>
                         <span class="absolute -top-1 -right-1 inline-flex items-center justify-center px-1.5 py-0.5 text-xs font-semibold leading-none text-white bg-red-600 rounded-full"><?= $badge; ?></span>
                     <?php endif; ?>
-                </button>
+                </nav>
 
                 <?php if(isset($_SESSION['user_id'])): ?>
                     <div class="relative">
@@ -125,7 +187,6 @@
                 </button>
             </div>
         </div>
-    </div>
 
     <div id="mobileMenu" class="md:hidden hidden bg-[#1D3428] border-t border-[#154620]">
         <div class="px-4 pt-3 pb-4 space-y-2">
@@ -133,8 +194,7 @@
             <a href="../pages/edit_detail_balita.php" class="block px-3 py-2 rounded-md text-base font-medium text-[#D0F246] hover:bg-[#154620]">Penimbangan</a>
             <a href="../pages/register.php" class="block px-3 py-2 rounded-md text-base font-medium text-[#D0F246] hover:bg-[#154620]">Pendaftaran</a>
         </div>
-    </div>
 
-</header>
+    </header>
 
-<main class="py-10">
+    <main class="py-10">
